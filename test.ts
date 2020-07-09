@@ -1,4 +1,4 @@
-function test ():number {
+function aa ():number {
   return 1
 }
-console.log(test())
+console.log(aa())
