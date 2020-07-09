@@ -7,7 +7,6 @@
     "test": "jest --passWithNoTests",
     "test:lint": "jest --passWithNoTests"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
