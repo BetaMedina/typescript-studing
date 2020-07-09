@@ -20,7 +20,7 @@ describe('Sign up Controller', () => {
     const sut = new SignUpController()
     const httpRequest = {
       body: {
-        name: '',
+        name: 'medina',
         email: '',
         password: 'any_password',
         passwordConfirm: 'any_password'
@@ -29,6 +29,20 @@ describe('Sign up Controller', () => {
     const httpResponse = sut.handle(httpRequest)
     await expect(httpResponse.statusCode).toBe(400)
     await expect(httpResponse.body).toEqual(new MissingParamError('email'))
+  })
+  it('Should return error if no password is provided', async () => {
+    const sut = new SignUpController()
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'medina@medina.com.br',
+        password: '',
+        passwordConfirm: 'any_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    await expect(httpResponse.statusCode).toBe(400)
+    await expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
   // it('Should pass parameters and create user account', () => {
 
