@@ -12,6 +12,7 @@ describe('Sign up Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     await expect(httpResponse.statusCode).toBe(400)
+    await expect(httpResponse.body).toEqual(new Error('Misssing param:name'))
   })
   // it('Should pass parameters and create user account', () => {
 
