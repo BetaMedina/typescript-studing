@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -25,13 +26,5 @@
     "lint-staged": "^10.2.11",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix"
   }
 }
