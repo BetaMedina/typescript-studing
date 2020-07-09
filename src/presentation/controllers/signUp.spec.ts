@@ -1,9 +1,31 @@
 import { SignUpController } from './signUpController'
 import { MissingParamError } from '../errors/missingParam.error'
+import { InvalidParamError } from '../errors/invalidParam.error'
+import { EmailValidator } from '../protocols/emailValidator'
+
+interface SutTypes {
+  sut:SignUpController
+  emailValidatorStub:EmailValidator
+}
+
+const makeSut = ():SutTypes => {
+  class EmailValidatorStub implements EmailValidator { 
+    isValid (email:string):boolean {
+      return true
+    }
+  }
+
+  const emailValidatorStub = new EmailValidatorStub()
+  const sut = new SignUpController(emailValidatorStub)
+  return {
+    sut,
+    emailValidatorStub
+  }
+}
 
 describe('Sign up Controller', () => {
   it('Should return error if no name is provided', async () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: '',
@@ -17,7 +39,7 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
   it('Should return error if no email is provided', async () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'medina',
@@ -31,7 +53,7 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
   it('Should return error if no password is provided', async () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'medina',
@@ -44,8 +66,24 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.statusCode).toBe(400)
     await expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
+  it('Should return error if invalid email is provided', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'invalid_email@medina.com.br',
+        password: 'any_password',
+        passwordConfirm: 'any_password'
+      }
+    }
+
+    const httpResponse = sut.handle(httpRequest)
+    await expect(httpResponse.statusCode).toBe(400)
+    await expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
   it('Should return error if no passwordConfirmation is provided', async () => {
-    const sut = new SignUpController()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'medina',
@@ -56,7 +94,7 @@ describe('Sign up Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest)
     await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+    await expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirm'))
   })
   // it('Should pass parameters and create user account', () => {
 
