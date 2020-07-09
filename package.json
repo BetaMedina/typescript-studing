@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "test:lint": "jest --passWithNoTests"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
