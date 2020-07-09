@@ -1,6 +1,6 @@
 export class SignUpController {
   handle (httpRequest:any):any {
-    console.log('testandaaao husky')
+    console.log('testandaaaaao husky')
     return {
       statusCode: 400
     }
