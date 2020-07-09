@@ -12,7 +12,7 @@ describe('Sign up Controller', () => {
     }
     console.log('a')
     const httpResponse = sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(200)
+    await expect(httpResponse.statusCode).toBe(400)
   })
   // it('Should pass parameters and create user account', () => {
 
