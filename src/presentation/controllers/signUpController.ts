@@ -5,6 +5,7 @@ import { ControllerInterface } from '../protocols/controller'
 import { badRequest } from '../helpers/http.helper'
 import { EmailValidator } from '../protocols/emailValidator'
 import { InvalidParamError } from '../errors/invalidParam.error'
+
 export class SignUpController implements ControllerInterface {
   private readonly emailValidator: EmailValidator
   
@@ -19,9 +20,7 @@ export class SignUpController implements ControllerInterface {
         return badRequest(new MissingParamError(field))
       }
     }
-    const teste = this.emailValidator.isValid(httpRequest.body.email)
-    console.log(teste)
-    if (!teste) {
+    if (!(this.emailValidator.isValid(httpRequest.body.email))) {
       return badRequest(new InvalidParamError('email'))
     }
   }
