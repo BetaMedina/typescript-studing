@@ -132,4 +132,18 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.statusCode).toBe(400)
     await expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirm'))
   })
+  it('If password confirmation fail', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'medina@medina.com.br',
+        password: 'any_password',
+        passwordConfirm: 'invalid_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    await expect(httpResponse.statusCode).toBe(400)
+    await expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirm'))
+  })
 })
