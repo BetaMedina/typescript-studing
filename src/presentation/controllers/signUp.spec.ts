@@ -1,10 +1,13 @@
 import { SignUpController } from './signUpController'
 import { MissingParamError, InvalidParamError, ServerError } from '../errors'
 import { EmailValidator } from '../protocols/emailValidator'
+import { AccountModel } from '../../domain/models/account'
+import { AddAccount, AddAccountModel } from '../../domain/usecases/add-account'
 
 interface SutTypes {
   sut:SignUpController
-  emailValidatorStub:EmailValidator
+  emailValidatorStub:EmailValidator,
+  addAccountStub
 }
 
 const makeEmailValidator = (): EmailValidator => {
@@ -16,15 +19,32 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
-const makeSut = ():SutTypes => {
-  const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
-  return {
-    sut,
-    emailValidatorStub
+const makeAddAcount = (): AddAccount => {
+  class AddAccountSub implements AddAccount { 
+    add (account:AddAccountModel):AccountModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password'
+      }
+      return fakeAccount
+    }
   }
+  return new AddAccountSub()
 }
 
+const makeSut = ():SutTypes => {
+  const emailValidatorStub = makeEmailValidator()
+  const addAccountStub = makeAddAcount()
+
+  const sut = new SignUpController(emailValidatorStub, addAccountStub)
+  return {
+    sut,
+    emailValidatorStub,
+    addAccountStub
+  }
+}
 describe('Sign up Controller', () => {
   it('Should return error if no name is provided', async () => {
     const { sut } = makeSut()
@@ -118,7 +138,7 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.statusCode).toBe(500)
     await expect(httpResponse.body).toEqual(new ServerError())
   })
-  it('Should return error if no passwordConfirmation is provided', async () => {
+  it('Should call AddAccount with correct values', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -133,17 +153,22 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirm'))
   })
   it('If password confirmation fail', async () => {
-    const { sut } = makeSut()
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+
     const httpRequest = {
       body: {
         name: 'medina',
         email: 'medina@medina.com.br',
         password: 'any_password',
-        passwordConfirm: 'invalid_password'
+        passwordConfirm: 'any_password'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirm'))
+    sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'medina',
+      email: 'medina@medina.com.br',
+      password: 'any_password'
+    })
   })
 })
