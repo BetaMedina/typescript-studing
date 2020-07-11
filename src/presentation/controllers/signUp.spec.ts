@@ -7,14 +7,26 @@ interface SutTypes {
   emailValidatorStub:EmailValidator
 }
 
-const makeSut = ():SutTypes => {
+const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator { 
     isValid (email:string):boolean {
       return true
     }
   }
+  return new EmailValidatorStub()
+}
 
-  const emailValidatorStub = new EmailValidatorStub()
+const makeEmailValidatorWithError = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator { 
+    isValid (email:string):boolean {
+      throw new Error()
+    }
+  }
+  return new EmailValidatorStub()
+}
+
+const makeSut = ():SutTypes => {
+  const emailValidatorStub = makeEmailValidator()
   const sut = new SignUpController(emailValidatorStub)
   return {
     sut,
@@ -97,16 +109,10 @@ describe('Sign up Controller', () => {
     await expect(isValidSpy).toHaveBeenCalledWith('invalid_email@medina.com.br')
   })
   it('Should return 500 if EmailValidator throws', async () => {
-    class EmailValidatorStub implements EmailValidator { 
-      isValid (email:string):boolean {
-        throw new Error()
-      }
-    }
+    const emailValidatorErrorStub = makeEmailValidatorWithError()
   
-    const emailValidatorStub = new EmailValidatorStub()
-    const sut = new SignUpController(emailValidatorStub)
+    const sut = new SignUpController(emailValidatorErrorStub)
     
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     const httpRequest = {
       body: {
         name: 'medina',
