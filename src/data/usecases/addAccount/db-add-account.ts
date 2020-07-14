@@ -1,16 +1,13 @@
-import { AccountModel } from '../../../domain/models/account'
-import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-account'
-import { Encrypter } from '../../protocols/encrypter'
+import { AddAccountRepository } from '../../protocols/add-account-repository'
+import { Encrypter, AccountModel, AddAccount, AddAccountModel } from './db-add-accounnt-protocols'
 
 export class DbAddAccount implements AddAccount {
-  private readonly encrypter:Encrypter
-  
-  constructor (encrypter:Encrypter) {
-    this.encrypter = encrypter
-  }
+  // eslint-disable-next-line no-useless-constructor
+  constructor (private encrypter:Encrypter, private addAccountReposity :AddAccountRepository) {}
 
-  async add (account:AddAccountModel):Promise<AccountModel> {
-    const encryptPass = await this.encrypter.encrypt(account.password)
+  async add (accountData:AddAccountModel):Promise<AccountModel> {
+    const passwordCrypted = await this.encrypter.encrypt(accountData.password)
+    await this.addAccountReposity.create(Object.assign({}, accountData, { password: passwordCrypted }))
     return new Promise(resolve => resolve(null))  
   }
 }
