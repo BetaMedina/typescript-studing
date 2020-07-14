@@ -19,6 +19,7 @@
         "@typescript-eslint/explicit-function-return-type": ["error"],
         "@typescript-eslint/strict-boolean-expressions": "off",
         "no-unused-vars":"off",
-        "no-trailing-spaces":"off"
+        "no-trailing-spaces":"off",
+        "no-useless-constructor":"off"
     }
 }

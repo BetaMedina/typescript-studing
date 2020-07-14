@@ -76,4 +76,30 @@ describe('DbAddAccount UseCase', () => {
 
     })
   })
+  it('Should throw if addAccountRepositorie throws ', async () => {
+    const { addAccountReposityStub, sut } = makeSut()
+    jest.spyOn(addAccountReposityStub, 'create').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const accountData = {
+      name: 'validName',
+      email: 'validMail',
+      password: 'validPassword'
+    }
+    expect(sut.add(accountData)
+    ).rejects.toThrow()
+  })
+  it('Should return and account on success ', async () => {
+    const { addAccountReposityStub, sut } = makeSut()
+    const accountData = {
+      name: 'validName',
+      email: 'validMail',
+      password: 'validPassword'
+    }
+    const account = await sut.add(accountData)
+    expect(account).toEqual({
+      id: 'validId',
+      name: 'validName',
+      email: 'validMail',
+      password: 'hashedValue'
+    })
+  })
 })
