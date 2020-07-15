@@ -2,15 +2,19 @@
 import { MongoHelper } from '../helpers/mongo.helper'
 import { AccountRepository } from '../account-repository/account'
 
+const makeSut = ():AccountRepository => {
+  return new AccountRepository()
+}
+let sut:AccountRepository
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect()
+    sut = makeSut()
   })
   afterAll(async () => {
     await MongoHelper.disconnect()
   })
   it('Should return an account on success', async () => {
-    const sut = new AccountRepository()
     const account = await sut.create({
       name: 'validName',
       email: 'validMail@mail.com',
