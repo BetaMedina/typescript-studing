@@ -47,7 +47,7 @@ describe('DbAddAccount UseCase', () => {
       email: 'validMail',
       password: 'validPassword'
     }
-    await sut.add(accountData)
+    await sut.create(accountData)
     expect(encryptSpy).toHaveBeenCalledWith('validPassword')
   })
   it('Should throw if encrypter throws ', async () => {
@@ -58,7 +58,7 @@ describe('DbAddAccount UseCase', () => {
       email: 'validMail',
       password: 'validPassword'
     }
-    expect(sut.add(accountData)
+    expect(sut.create(accountData)
     ).rejects.toThrow()
   })
   it('Should call addAccountRepositorie with correct password ', async () => {
@@ -69,7 +69,7 @@ describe('DbAddAccount UseCase', () => {
       email: 'validMail',
       password: 'validPassword'
     }
-    await sut.add(accountData)
+    await sut.create(accountData)
     expect(createSpy).toHaveBeenCalledWith({
       ...accountData,
       password: 'hashedValue'
@@ -84,7 +84,7 @@ describe('DbAddAccount UseCase', () => {
       email: 'validMail',
       password: 'validPassword'
     }
-    expect(sut.add(accountData)
+    expect(sut.create(accountData)
     ).rejects.toThrow()
   })
   it('Should return and account on success ', async () => {
@@ -94,7 +94,7 @@ describe('DbAddAccount UseCase', () => {
       email: 'validMail',
       password: 'validPassword'
     }
-    const account = await sut.add(accountData)
+    const account = await sut.create(accountData)
     expect(account).toEqual({
       id: 'validId',
       name: 'validName',
