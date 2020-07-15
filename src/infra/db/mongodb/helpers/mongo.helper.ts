@@ -15,5 +15,13 @@ export const MongoHelper = {
 
   getCollection (name:string):Collection {
     return this.client.db().collection(name)
+  },
+
+  map (collection: any):any {
+    const formatingCollection = collection.ops[0]
+    const { _id, ...formated } = formatingCollection
+    
+    return { ...formated, id: _id }
   }
+  
 }
