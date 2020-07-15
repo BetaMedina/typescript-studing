@@ -19,7 +19,7 @@ describe('Account Mongo Repository', () => {
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe('validName')
-    expect(account.email).toBe('alidMail@mail.com')
+    expect(account.email).toBe('validMail@mail.com')
     expect(account.password).toBe('hashPass')
   })
 })
