@@ -7,7 +7,7 @@
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:lint": "npm run test -- ",
     "test:verbose": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:integration": "npm run test -- --watch -c jest.integration.config.js",
+    "test:integration": " jest  -c jest.integration.config.js",
     "test:watch": "npm run test:verbose -- --watch",
     "test:ci": "npm run test -- --coverage",
     "start": "sucrase-node src/main/server.ts"
@@ -22,6 +22,7 @@
     "@types/jest": "^26.0.4",
     "@types/mongodb": "^3.5.25",
     "@types/node": "^14.0.20",
+    "@types/supertest": "^2.0.10",
     "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",
@@ -35,6 +36,7 @@
     "jest": "^26.1.0",
     "lint-staged": "^10.2.11",
     "sucrase": "^3.15.0",
+    "supertest": "^4.0.2",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
   },

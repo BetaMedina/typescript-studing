@@ -9,10 +9,7 @@ import {
 import { badRequest, serverError, successResponse } from '../../helpers/http.helper'
 
 export class SignUpController implements ControllerInterface {
-  private readonly emailValidator: EmailValidator
-  private readonly addAccount: AddAccount
-  
-  constructor (emailValidator:EmailValidator, addAccount:AddAccount) {
+  constructor (private emailValidator:EmailValidator, private addAccount:AddAccount) {
     this.emailValidator = emailValidator
     this.addAccount = addAccount
   }
