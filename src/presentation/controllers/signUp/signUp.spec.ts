@@ -201,6 +201,23 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.body).toBeInstanceOf(ServerError)
   })
 
+  it('Should return 400 if password is diferent to password confirmation', async () => {
+    const { sut } = makeSut()
+    
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'any@medina.com.br',
+        password: 'any_password',
+        passwordConfirm: 'any_password_wrong'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    await expect(httpResponse.statusCode).toBe(400)
+    await expect(httpResponse.body).toBeInstanceOf(InvalidParamError)
+  })
+
   it('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
