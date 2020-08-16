@@ -159,6 +159,6 @@ describe('', () => {
     const httpResponse = await sut.handle(payload)
 
     await expect(httpResponse.statusCode).toBe(200)
-    await expect(httpResponse.body).toBe('any_token') 
+    await expect(httpResponse.body.access_token).toBe('any_token') 
   })
 })

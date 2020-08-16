@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse, Authentication, ControllerInterface, EmailValidator } from './login-protocols'
-import { badRequest, unauthorized, serverError } from '../../helpers/http.helper' 
+import { badRequest, unauthorized, serverError, successResponse } from '../../helpers/http.helper' 
 import { MissingParamError, InvalidParamError } from '../../errors/index'
 
 export class LoginController implements ControllerInterface {
@@ -25,10 +25,7 @@ export class LoginController implements ControllerInterface {
         return unauthorized()
       }
 
-      return {
-        statusCode: 200,
-        body: token
-      }
+      return successResponse({ access_token: token })
     } catch (err) {
       return serverError(err)
     }
