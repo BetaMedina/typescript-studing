@@ -114,6 +114,24 @@ describe('', () => {
     await expect(httpResponse.body).toEqual(new ServerError('any_error')) 
   })
 
+  it('Should return 500 if authenticated throws', async () => {
+    const payload:IPayload = {
+      body: {
+        email: 'invalid@mail.com',
+        password: 'validpassword'
+      }
+    }
+
+    jest.spyOn(authentication, 'auth').mockImplementationOnce(() => {
+      throw new ServerError('any_error')
+    })
+    
+    const httpResponse = await sut.handle(payload)
+
+    await expect(httpResponse.statusCode).toBe(500)
+    await expect(httpResponse.body).toEqual(new ServerError('any_error')) 
+  })
+
   it('Should call authentication with incorrect credentials', async () => {
     const payload:IPayload = {
       body: {
