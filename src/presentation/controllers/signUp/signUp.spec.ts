@@ -5,12 +5,14 @@ import { AccountModel } from '../../../domain/models/account'
 import { 
   AddAccount,
   EmailValidator,
-  AddAccountModel
+  AddAccountModel,
+  Validation
 } from './signUp-protocols'
 
 interface SutTypes {
   sut:SignUpController
   emailValidatorStub:EmailValidator,
+  validationStub:Validation,
   addAccountStub
 }
 
@@ -38,15 +40,26 @@ const makeAddAcount = (): AddAccount => {
   return new AddAccountSub()
 }
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation { 
+    validate (input:any):Error {
+      return null 
+    }
+  }
+  return new ValidationStub()
+}
+
 const makeSut = ():SutTypes => {
   const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAcount()
+  const validationStub = makeValidation() 
 
-  const sut = new SignUpController(emailValidatorStub, addAccountStub)
+  const sut = new SignUpController(emailValidatorStub, addAccountStub, validationStub)
   return {
     sut,
     emailValidatorStub,
-    addAccountStub
+    addAccountStub,
+    validationStub
   }
 }
 describe('Sign up Controller', () => {
@@ -236,5 +249,23 @@ describe('Sign up Controller', () => {
       email: 'valid_email@mail.com',
       password: 'valid_password'
     })
+  })
+
+  it('Should call validation validator with correct value', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'invalid_email@medina.com.br',
+        password: 'any_password',
+        passwordConfirm: 'any_password'
+      }
+    }
+
+    await sut.handle(httpRequest)
+
+    await expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
