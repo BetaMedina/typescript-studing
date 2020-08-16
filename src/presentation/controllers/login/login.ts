@@ -1,11 +1,10 @@
+import { Authentication } from '../../../domain/usecases/authentication'
 import { ControllerInterface } from '../../protocols/controller'
 import { EmailValidator } from '../signUp/signUp-protocols'
-import { HttpRequest, HttpResponse, badRequest, MissingParamError, serverError, InvalidParamError } from './login-protocols'
+import { HttpRequest, HttpResponse, badRequest, MissingParamError, unauthorized, serverError, InvalidParamError } from './login-protocols'
 
 export class LoginController implements ControllerInterface {
-  constructor (private emailValidator:EmailValidator) {
-    this.emailValidator = emailValidator
-  }
+  constructor (private emailValidator:EmailValidator, private authenticated:Authentication) {}
 
   async handle (httpRequest:HttpRequest): Promise <HttpResponse> {
     const requiredFields = ['email', 'password']
@@ -18,9 +17,18 @@ export class LoginController implements ControllerInterface {
       if (await (!this.emailValidator.isValid(httpRequest.body.email))) {
         return badRequest(new InvalidParamError('email'))
       }
+      
+      const { email, password } = httpRequest.body
+
+      const token = await this.authenticated.auth(email, password)
+
+      if (!token) {
+        return unauthorized('Invalid credentials')
+      }
+
       return {
         statusCode: 200,
-        body: 'aaaa'
+        body: token
       }
     } catch (err) {
       return serverError(err)

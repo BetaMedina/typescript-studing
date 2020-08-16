@@ -16,3 +16,8 @@ export const successResponse = (body):HttpResponse => ({
   statusCode: 200,
   body
 })
+
+export const unauthorized = (body):HttpResponse => ({
+  statusCode: 401,
+  body
+})
