@@ -1,7 +1,6 @@
-import { Authentication } from '../../../domain/usecases/authentication'
-import { ControllerInterface } from '../../protocols/controller'
-import { EmailValidator } from '../signUp/signUp-protocols'
-import { HttpRequest, HttpResponse, badRequest, MissingParamError, unauthorized, serverError, InvalidParamError } from './login-protocols'
+import { HttpRequest, HttpResponse, Authentication, ControllerInterface, EmailValidator } from './login-protocols'
+import { badRequest, unauthorized, serverError } from '../../helpers/http.helper' 
+import { MissingParamError, InvalidParamError } from '../../errors/index'
 
 export class LoginController implements ControllerInterface {
   constructor (private emailValidator:EmailValidator, private authenticated:Authentication) {}
