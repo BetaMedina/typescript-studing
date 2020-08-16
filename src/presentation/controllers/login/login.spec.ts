@@ -1,4 +1,4 @@
-import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { InvalidParamError, MissingParamError, ServerError, UnauthorizedError } from '../../errors'
 import { EmailValidator } from '../signUp/signUp-protocols'
 import { LoginController } from './login'
 import { Authentication } from '../../../domain/usecases/authentication'
@@ -127,7 +127,7 @@ describe('', () => {
     const httpResponse = await sut.handle(payload)
 
     await expect(httpResponse.statusCode).toBe(401)
-    await expect(httpResponse.body).toBe('Invalid credentials') 
+    await expect(httpResponse.body).toBeInstanceOf(UnauthorizedError) 
   })
 
   it('Should call authentication with correct values', async () => {

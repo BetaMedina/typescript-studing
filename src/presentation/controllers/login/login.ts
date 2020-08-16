@@ -23,7 +23,7 @@ export class LoginController implements ControllerInterface {
       const token = await this.authenticated.auth(email, password)
 
       if (!token) {
-        return unauthorized('Invalid credentials')
+        return unauthorized()
       }
 
       return {
