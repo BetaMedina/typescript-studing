@@ -8,6 +8,7 @@ import {
   AddAccountModel,
   Validation
 } from './signUp-protocols'
+import { badRequest } from '../login/login-protocols'
 
 interface SutTypes {
   sut:SignUpController
@@ -267,5 +268,23 @@ describe('Sign up Controller', () => {
     await sut.handle(httpRequest)
 
     await expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+  it('Should return 400 if validation return an error', async () => {
+    const { sut, validationStub } = makeSut()
+
+    jest.spyOn(validationStub, 'validate').mockReturnValue(new MissingParamError('any_error'))
+
+    const httpRequest = {
+      body: {
+        name: 'medina',
+        email: 'invalid_email@medina.com.br',
+        password: 'any_password',
+        passwordConfirm: 'any_password'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    await expect(httpResponse).toEqual(badRequest(new MissingParamError('any_error')))
   })
 })
