@@ -27,6 +27,12 @@ describe('Email-validation', () => {
     await expect(httpResponse).toEqual(new InvalidParamError('valid_email@medina.com.br'))
   })
 
+  it('Email validator throw', async () => {
+    jest.spyOn(emailValidationSut, 'isValid').mockImplementationOnce(() => { throw new Error() })
+
+    expect(sut.validate).toThrow()
+  })
+  
   it('Should call email validator with correct mail', async () => {
     const isValidSpy = jest.spyOn(emailValidationSut, 'isValid')
 
