@@ -4,7 +4,6 @@ import { AccountModel } from '../../../domain/models/account'
 
 import { 
   AddAccount,
-  EmailValidator,
   AddAccountModel,
   Validation
 } from './signUp-protocols'
