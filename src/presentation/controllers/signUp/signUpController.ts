@@ -11,7 +11,6 @@ import { Validation } from '../../helpers/validators/validation'
 
 export class SignUpController implements ControllerInterface {
   constructor (
-    private readonly emailValidator:EmailValidator, 
     private readonly addAccount:AddAccount, 
     private readonly validation:Validation
   ) {}
@@ -25,10 +24,7 @@ export class SignUpController implements ControllerInterface {
       }
       
       const { name, email, password } = httpRequest.body
-
-      if (!(this.emailValidator.isValid(email))) {
-        return badRequest(new InvalidParamError('email'))
-      }
+      
       const account = await this.addAccount.create({
         name, email, password
       })

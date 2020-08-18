@@ -12,10 +12,9 @@ import { makeValidationSignUpController } from './signup-validation'
 export const makeSignUpController = ():ControllerInterface => {
   const accountRepository = new AccountRepository()
   const bcryptAdapter = new BcryptAdapter(12)
-  const emailValidatorAdapter = new EmailValidatorAdapter()
   const dbAddAccount = new DbAddAccount(bcryptAdapter, accountRepository)
 
-  const signUController = new SignUpController(emailValidatorAdapter, dbAddAccount, makeValidationSignUpController())
+  const signUController = new SignUpController(dbAddAccount, makeValidationSignUpController())
   
   const logRepository = new LogMongoRepository()
   
