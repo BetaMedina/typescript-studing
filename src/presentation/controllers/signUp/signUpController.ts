@@ -1,4 +1,4 @@
-import { MissingParamError, InvalidParamError } from '../../errors'
+import { InvalidParamError } from '../../errors'
 import { 
   ControllerInterface, 
   HttpResponse, 
@@ -17,19 +17,13 @@ export class SignUpController implements ControllerInterface {
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const requiredFields = ['email', 'name', 'password', 'passwordConfirm']
     try {
       const error = this.validation.validate(httpRequest.body)
 
       if (error) {
         return badRequest(error)
       }
-
-      for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field))
-        }
-      }
+      
       const { name, email, password, passwordConfirm } = httpRequest.body
       if (password !== passwordConfirm) {
         return badRequest(new InvalidParamError('passwordConfirm'))

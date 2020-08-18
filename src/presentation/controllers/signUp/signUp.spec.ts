@@ -64,48 +64,6 @@ const makeSut = ():SutTypes => {
   }
 }
 describe('Sign up Controller', () => {
-  it('Should return error 400 if no name is provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: '',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirm: 'any_password'
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new MissingParamError('name'))
-  })
-  it('Should return error 400 if no email is provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: 'medina',
-        email: '',
-        password: 'any_password',
-        passwordConfirm: 'any_password'
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new MissingParamError('email'))
-  })
-  it('Should return error 400 if no password is provided', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: 'medina',
-        email: 'medina@medina.com.br',
-        password: '',
-        passwordConfirm: 'any_password'
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new MissingParamError('password'))
-  })
   it('Should return error 400 if invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
@@ -160,20 +118,7 @@ describe('Sign up Controller', () => {
     await expect(httpResponse.statusCode).toBe(500)
     await expect(httpResponse.body).toEqual(new ServerError('any_error'))
   })
-  it('Should return error 400 if call AddAccount with  incorrect values', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        name: 'medina',
-        email: 'medina@medina.com.br',
-        password: 'any_password',
-        passwordConfirm: ''
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    await expect(httpResponse.statusCode).toBe(400)
-    await expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirm'))
-  })
+ 
   it('If password confirmation fail', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'create')
