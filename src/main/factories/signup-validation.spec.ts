@@ -10,7 +10,7 @@ describe('SignUp Validation Factory', () => {
   it('Should call ValidationComposite with all correct values', () => {
     makeValidationSignUpController()
     const validations:Validation[] = []
-    for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
+    for (const field of ['name', 'email', 'password', 'passwordConfirm']) {
       validations.push(new RequiredFields(field))
     }
     expect(ValidationComposite).toHaveBeenCalledWith(validations) 
