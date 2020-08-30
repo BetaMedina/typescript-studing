@@ -62,6 +62,21 @@ describe('', () => {
     await expect(httpResponse.body).toEqual(new ServerError('any_error')) 
   })
 
+  it('Expected auth is called with Correct parameters', async () => {
+    const payload:IPayload = {
+      body: {
+        email: 'invalid@mail.com',
+        password: 'validpassword'
+      }
+    }
+
+    const authSpy = jest.spyOn(authentication, 'auth')
+    
+    await sut.handle(payload)
+
+    await expect(authSpy).toBeCalledWith(payload.body)
+  })
+
   it('Should call authentication with incorrect credentials', async () => {
     const payload:IPayload = {
       body: {
