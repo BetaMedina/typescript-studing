@@ -1,7 +1,7 @@
 import { MissingParamError, ServerError, UnauthorizedError } from '../../errors'
 import { Validation } from '../signUp/signUp-protocols'
 import { LoginController } from './login'
-import { Authentication } from '../../../domain/usecases/authentication'
+import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
 import { badRequest } from '../../helpers/http/http.helper'
 
 interface IPayload {
@@ -30,7 +30,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthSut = (): Authentication => {
   class Auth implements Authentication { 
-    auth (email:string, password:string):Promise<string> {
+    auth (authentication:AuthenticationModel):Promise<string> {
       return new Promise(resolve => resolve('any_token'))
     }
   }
