@@ -1,6 +1,6 @@
 import { LogErrorControllerDecorator } from './log'
 import { ControllerInterface, HttpRequest, HttpResponse } from '../../presentation/protocols'
-import { serverError, successResponse } from '../../presentation/helpers/http.helper'
+import { serverError } from '../../presentation/helpers/http/http.helper'
 import { LogErrorRepository } from '../../data/protocols/log-error-repository'
 
 class ControllerSpy implements ControllerInterface {

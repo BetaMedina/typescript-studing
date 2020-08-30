@@ -1,6 +1,6 @@
-import { InvalidParamError, MissingParamError } from '../../errors'
+import { MissingParamError } from '../../errors'
 import { ValidationComposite } from './validation-composite'
-import { Validation } from './validation'
+import { Validation } from '../../protocols/validation'
 
 class Validate implements Validation {
   validate (input:any):Error {
