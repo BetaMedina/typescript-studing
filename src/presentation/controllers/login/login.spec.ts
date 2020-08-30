@@ -1,5 +1,5 @@
 import { MissingParamError, ServerError, UnauthorizedError } from '../../errors'
-import { EmailValidator, Validation } from '../signUp/signUp-protocols'
+import { Validation } from '../signUp/signUp-protocols'
 import { LoginController } from './login'
 import { Authentication } from '../../../domain/usecases/authentication'
 import { badRequest } from '../../helpers/http.helper'
@@ -12,12 +12,11 @@ interface IPayload {
 }
 
 let sut:LoginController
-let mailValidator:EmailValidator
 let authentication:Authentication
 let validation:Validation
 
-const makeLoginSut = (mailValidator, authentication, validation) => {
-  return new LoginController(mailValidator, authentication, validation)
+const makeLoginSut = (authentication, validation) => {
+  return new LoginController(authentication, validation)
 }
 
 const makeValidation = (): Validation => {
@@ -27,15 +26,6 @@ const makeValidation = (): Validation => {
     }
   }
   return new ValidationStub()
-}
-
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator { 
-    isValid (email:string):boolean {
-      return true
-    }
-  }
-  return new EmailValidatorStub()
 }
 
 const makeAuthSut = (): Authentication => {
@@ -49,10 +39,9 @@ const makeAuthSut = (): Authentication => {
 
 describe('', () => {
   beforeEach(() => {
-    mailValidator = makeEmailValidator()
     authentication = makeAuthSut()
     validation = makeValidation()
-    sut = makeLoginSut(mailValidator, authentication, validation)
+    sut = makeLoginSut(authentication, validation)
   })
 
   it('Should return 500 if authenticated throws', async () => {

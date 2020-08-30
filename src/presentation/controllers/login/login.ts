@@ -1,10 +1,8 @@
-import { HttpRequest, HttpResponse, Authentication, ControllerInterface, EmailValidator } from './login-protocols'
+import { HttpRequest, HttpResponse, Authentication, ControllerInterface, Validation } from './login-protocols'
 import { badRequest, unauthorized, serverError, successResponse } from '../../helpers/http.helper' 
-import { Validation } from '../signUp/signUp-protocols'
 
 export class LoginController implements ControllerInterface {
   constructor (
-    private emailValidator:EmailValidator, 
     private authenticated:Authentication,
     private readonly validation:Validation
   ) {}
