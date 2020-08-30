@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests  --noStackTrace --runInBand",
+    "test": "jest --passWithNoTests  --noStackTrace --runInBand --no-cache",
     "test:lint": "npm run test -- ",
     "test:verbose": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:integration": " jest  -c jest.integration.config.js",

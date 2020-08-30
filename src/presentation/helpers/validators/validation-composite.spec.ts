@@ -18,7 +18,6 @@ describe('Compare-fields', () => {
     validateSut = new Validate()
     sut = new ValidationComposite([validateSut])
   })
-
   it('Should call validators with incorrect payload', async () => {
     jest.spyOn(validateSut, 'validate').mockReturnValue(new MissingParamError('password'))
 
